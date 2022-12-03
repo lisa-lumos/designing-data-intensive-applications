@@ -14,8 +14,8 @@ Notes for the book written by Martin Cleppmann. Notes are taken when I read the 
 - How they are appropriate to different situations
 
 ## 3. Storage and Retrieval
-- Storage engines
-- How databases arrange data on disk so that we can retrieve it efficiently
+- The internals of storage engines
+- How databases lay out data on disk so that we can retrieve it efficiently
 
 ## 4. Encoding and Evolution
 - Formats for data encoding (serialization) 
