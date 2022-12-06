@@ -32,14 +32,17 @@ For `human errors`, we could Design systems in a way that minimizes opportunitie
 ## Scalability
 `Scalability` is the term we use to describe a system’s ability to `cope with increased load`. Discussing scalability means considering questions like “If the system grows in a particular way, what are our options for coping with the growth?” and “How can we add computing resources to handle the additional load?” 
 
+`Load` can be described with a few load parameters. The best choice of parameters (requests per sec, ratio of reads to writes, num of concurrent active users, ...) depends on the architecture of your system. 
 
+An example: Implementing Twitter. Twitter’s scaling challenge is due to fan-out (each user follows/followed-by many people). There are two ways of doing this:
+- Posting a tweet inserts the new tweet into a global tweets collection. When a user requests their home timeline, look up all the people they follow, find all the tweets for each of those users, and merge them,  sorted by time. Do more work at read time and less at write time. (v1 of twitter)
+- Maintain a pre-computed cache for each user’s home timeline. When a user posts a tweet, look up all the people who follow that user, and insert the new tweet into each of their home timeline caches. Do more work at write time and less at read time. (v2 of twitter, switched from v1, because home-page refresh happens much more frequent than posting a tweet)
 
+However, for v2, celebrities have millions of followers makes updating cache time-consuming. So they use hybrid v1 (for celebrities) and v2 (for regular users) approach. 
 
+Describing the performance of a system: In online systems, service’s `response time` is important (the time between a client sending a request and receiving a response). Response time is not as a single number, but a distribution of values (better in percentiles) that you can measure. `High percentiles` of response times, also known as tail latencies, are important because they directly affect users’ experience of the service. Queueing delays often account for a large part of the response time at high percentiles.
 
-
-
-
-
+The `response time` is what the `client sees`: besides the actual time to process the request, it includes network delays and queueing delays. `Latency` is the duration that a request is waiting to be handled (awaiting service). 
 
 
 
