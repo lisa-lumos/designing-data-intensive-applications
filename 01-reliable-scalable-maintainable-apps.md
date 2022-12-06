@@ -44,13 +44,17 @@ Describing the performance of a system: In online systems, service’s `response
 
 The `response time` is what the `client sees`: besides the actual time to process the request, it includes network delays and queueing delays. `Latency` is the duration that a request is waiting to be handled (awaiting service). 
 
+A system that can run on a single machine is often simpler, but high-end machines can be very expensive, so very intensive workloads often `can’t avoid scaling out`. In reality, good architectures usually involve a  `mixture of approaches`.
 
+An architecture that scales well for a particular application is built around assumptions of which operations will be common and which will be rare (the load parameters). If those assumptions turn out to be wrong, the engineering effort for scaling is wasted or counterproductive. In an early-stage startup or an unproven product it’s usually more important to be able to `iterate quickly on product features` than it is to `scale to some hypothetical future load`.
 
+## Maintainability
+The majority of the cost of software is not in its initial development, but in its ongoing maintenance. 
 
-
-
-
-
+For maintainability, there are three design principles for software systems:
+- Operability - Make it easy for operations teams to keep the system running smoothly.
+- Simplicity - Make it easy for new engineers to understand the system (rmv complexity).
+- Evolvability - Make it easy for engineers to make changes to the system in the future, adapting it for unanticipated use cases as requirements change.
 
 
 
