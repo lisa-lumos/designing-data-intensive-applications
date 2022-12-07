@@ -54,7 +54,30 @@ The majority of the cost of software is not in its initial development, but in i
 For maintainability, there are three design principles for software systems:
 - Operability - Make it easy for operations teams to keep the system running smoothly.
 - Simplicity - Make it easy for new engineers to understand the system (rmv complexity).
-- Evolvability - Make it easy for engineers to make changes to the system in the future, adapting it for unanticipated use cases as requirements change.
+- Evolvability - Make it easy for engineers to make changes to the system in the future, adapting it for unanticipated use cases as requirements change (such as using agile working patterns).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
