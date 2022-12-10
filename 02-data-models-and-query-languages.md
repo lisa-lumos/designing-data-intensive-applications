@@ -26,15 +26,12 @@ Example: many people live in one city - normalizing this data requires many-to-o
 
 If the database itself does not support joins, you have to emulate a join in application code by making multiple queries to the database (the work of making the join is shifted from the database to the application code). Moreover, even if the initial version of an application fits well in a join-free document model, data has a tendency of becoming more interconnected as features are added to applications, with many-to-many relationships. 
 
+## Relational Versus Document Databases
+If the data in your application has a document-like structure (i.e., a tree of one-to-many relationships, where typically the entire tree is loaded at once), then it’s probably a good idea to use a document model. However, if your application use many-to-many relationships, using a document model can lead to significantly more complex application code and worse performance. For highly interconnected data, the document model is awkward, the relational model is acceptable, and graph models are the most natural.
 
+Most document databases, and the JSON support in relational databases, do not enforce any schema on the data in documents (schema-on-read).
 
-
-
-
-
-
-
-
+## Data locality for queries
 
 
 
