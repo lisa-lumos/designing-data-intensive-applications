@@ -32,8 +32,10 @@ If the data in your application has a document-like structure (i.e., a tree of o
 Most document databases, and the JSON support in relational databases, do not enforce any schema on the data in documents (schema-on-read).
 
 ## Data locality for queries
+A document is usually stored as a single continuous string, there is a performance advantage to this storage locality.
 
-
+## Query Languages for Data
+SQL is a declarative query language. It is up to the database system’s query optimizer to decide which indexes and which join methods to use, and in which order to execute various parts of the query. Also, declarative languages often lend themselves to parallel execution.
 
 
 
