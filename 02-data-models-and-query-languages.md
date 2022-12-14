@@ -37,6 +37,14 @@ A document is usually stored as a single continuous string, there is a performan
 ## Query Languages for Data
 SQL is a declarative query language. It is up to the database system’s query optimizer to decide which indexes and which join methods to use, and in which order to execute various parts of the query. Also, declarative languages often lend themselves to parallel execution.
 
+## MapReduce Querying
+MapReduce is a programming model for processing large amounts of data in bulk across many machines. MapReduce is neither a declarative query language nor a fully imperative query API, but somewhere in between: the logic of the query is expressed with snippets of code, which are called repeatedly by the processing framework. It is based on the map (also known as collect) and reduce (also known as fold or inject) functions that exist in many functional programming languages.
+
+## Graph-like data models
+A graph consists of two kinds of objects: vertices (also known as nodes or entities) and edges (also known as relationships or arcs). Many kinds of data can be modeled as a graph. Graphs are not limited to homogeneous data: an equally powerful use of graphs is to provide a consistent way of storing completely different types of objects in a single datastore.
+
+
+
 
 
 
