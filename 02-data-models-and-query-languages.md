@@ -43,6 +43,31 @@ MapReduce is a programming model for processing large amounts of data in bulk ac
 ## Graph-like data models
 A graph consists of two kinds of objects: vertices (also known as nodes or entities) and edges (also known as relationships or arcs). Many kinds of data can be modeled as a graph. Graphs are not limited to homogeneous data: an equally powerful use of graphs is to provide a consistent way of storing completely different types of objects in a single datastore.
 
+Some important aspects of this model are:
+1. Any vertex can have an edge connecting it with any other vertex. There is no schema that restricts which kinds of things can or cannot be associated.
+2. Given any vertex, you can efficiently find both its incoming and its outgoing edges, and thus traverse the graph.
+3. By using different labels for different kinds of relationships, you can store several different kinds of information in a single graph, while still maintaining a clean data model.
+
+Those features give graphs a great deal of flexibility for data modeling. Graphs are good for evolvability: as you add features to your application, a graph can easily be extended to accommodate changes in your application’s data structures.
+
+Cypher is a declarative query language for property graphs. 
+
+Since SQL:1999, the idea of variable-length traversal paths in a query can be expressed using recursive common table expressions (CTEs) (the WITH RECURSIVE syntax).
+
+### Triple-Stores and SPARQL
+In a triple-store, all information is stored in the form of very simple three-part statements: (subject, predicate, object). For example, in the triple (Jim, likes, bananas). 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
