@@ -57,7 +57,7 @@ Since SQL:1999, the idea of variable-length traversal paths in a query can be ex
 ### Triple-Stores and SPARQL
 In a triple-store, all information is stored in the form of very simple three-part statements: (subject, predicate, object). For example, in the triple (Jim, likes, bananas). 
 
-
+SPARQL is a query language for triple-stores using the RDF data model. SPARQL is a nice query language, it can be a powerful tool for applications to use internally.
 
 
 
