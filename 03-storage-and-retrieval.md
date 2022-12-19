@@ -13,20 +13,33 @@ If we only ever append to a file — how do we avoid running out of disk space? 
 CSV is not the best format for a log. It’s faster and simpler to use a binary format that first encodes the length of a string in bytes, followed by the raw string (without need for escaping).
 
 ## SSTables and LSM-Trees
+Now, if we require the sequence of key-value pairs to be sorted by key, then we obtain Sorted String Table (SSTable). Its advantages over log segments with hash indexes is: 
+- merging sorted segments is simple and efficient
+- In order to find a particular key in the file, you no longer need to keep an index of all the keys in memory, you only need a subset of them in memory (one key for every few kbs of offset file).
+- Allows for grouping and compression of blocks
 
+Maintaining a sorted structure on disk is possible with B-Trees, and maintaining it in memory is easy with tree data structures such as red-black trees or AVL trees. With these data structures, you can insert keys in any order and read them back in sorted order.
 
+We can now make our storage engine work as follows:
+- For a new write, add it to an in-memory balanced tree data structure, aka, a memtable (e.g. red-black tree).
+- When the memtable gets bigger than some MBs, write it out to disk as an SSTable file - it becomes the most recent segment of the database. While the SSTable is being written out to disk, writes can continue to a new memtable.
+- In order to serve a read request, first try to find the key in the memtable, then in the most recent on-disk segment, then in the next-older segment, etc.
+- From time to time, run a merging and compaction process in the background to combine segment files and to discard overwritten or deleted values.
+- If the database crashes, the most recent writes in the memtable are lost. To avoid this, keep a separate append only log on disk, whose only purpose is to restore the memtable after a crash. Every time the memtable is written out to an SSTable, the corresponding log can be discarded.
 
+This indexing structure was first described as Log-Structured Merge-Tree (LSM-Tree). 
 
+Examples: LevelDB, RocksDB, Cassandra, HBase, Lucene, Elasticsearch, Solr, ...
 
+## B-Trees (Self-balancing search tree)
+It is the most widely used indexing structure. They remain the standard index implementation in almost all relational databases, and many nonrelational databases use them too.
 
+B-trees break the database down into fixed-size blocks or pages, traditionally 4 KB in size, and read or write one page at a time. Each page can be identified using an address, which allows one page to refer to another (similar to a pointer, but on disk instead of in memory).
 
+One page is designated as the root of the B-tree; it is where you start for each lookups. The page contains keys and their references to child pages. Each child is responsible for a continuous range of keys:
+<img src="imgs/B-trees.png" style="width: 80%">
 
-
-
-
-
-
-
+The number of references to child pages in one page of the B-tree is called the `branching factor`. In practice, typically it is several hundred. 
 
 
 
