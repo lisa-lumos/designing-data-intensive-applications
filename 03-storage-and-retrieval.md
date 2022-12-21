@@ -41,10 +41,24 @@ One page is designated as the root of the B-tree; it is where you start for each
 
 The number of references to child pages in one page of the B-tree is called the `branching factor`. In practice, typically it is several hundred. 
 
+To update the value for an existing key in a B-tree, search for the leaf page containing that key, change the value in that page, and write the page back to disk (all references remain valid). 
 
+To add a new key, find the page whose range encompasses the new key and add it to that page. If there isn’t enough space in the page to accommodate the new key, it is split into two half-full pages, and the parent page is updated to account for the new subdivision of key ranges. 
 
+This algorithm ensures that the tree remains `balanced`: a B-tree with n keys always has a depth of O(log n). Most databases can fit into a B-tree that is three or four levels deep, so you don’t need to follow many page references to find the page you are looking for.
 
+To make the database resilient to crashes, it is common for B-tree implementations to include a write-ahead log (WAL). This is an append-only file to which every B-tree modification must be written before it can be applied to the pages of the tree itself. When the database comes back up after a crash, this log is used to restore the B-tree. 
 
+## Comparing B-Trees and LSM-Trees
+LSM-trees are typically faster for writes, whereas B-trees are faster for reads. However, you need to test systems with your particular workload in order to make a valid comparison. There is no quick and easy rule for determining which type of storage engine is better for your use case, so it is worth testing empirically.
+
+LSM-trees are typically able to sustain higher write throughput than B-trees, partly because they sometimes have lower write amplification (one write to the database resulting in multiple writes to the disk over the course of the database’s lifetime). LSM-trees can be compressed better, and thus often produce smaller files on disk than B-trees (who leave some disk space unused due to fragmentation). Lower write amplification and reduced fragmentation are also advantageous on SSDs: representing data more compactly allows more read and write requests within the available I/O bandwidth.
+
+A downside of log-structured storage is that the compaction process can sometimes interfere with the performance of ongoing reads and writes (sometimes a request needs to wait while the disk finishes an expensive compaction operation, and the bigger the database, the more disk bandwidth is required for compaction). So sometimes the response time of queries to log-structured storage engines can be quite high, while B-trees can be more predictable. To prevent compaction cannot keep up with incoming writes, you need explicit monitoring for this. 
+
+An advantage of B-trees is that each key exists in exactly one place in the index. This makes B-trees attractive in databases that want to offer strong transactional semantics: in many relational databases, transaction isolation is implemented using locks on ranges of keys, and in a B-tree index, those locks can be directly attached to the tree. 
+
+Both B-trees and log-structured indexes can be used as secondary indexes.
 
 
 
