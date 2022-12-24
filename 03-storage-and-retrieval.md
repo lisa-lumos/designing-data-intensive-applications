@@ -60,6 +60,35 @@ An advantage of B-trees is that each key exists in exactly one place in the inde
 
 Both B-trees and log-structured indexes can be used as secondary indexes.
 
+## In-memory databases
+Products such as VoltDB, MemSQL, and Oracle TimesTen are in-memory databases with a relational model. RAMCloud is an open source, in-memory key-value store with durability (using a log-structured approach for the data in memory as well as the data on disk). Redis and Couchbase provide weak durability by writing to disk asynchronously.
+
+To support datasets larger than the available memory, anti-caching approach works by evicting the least recently used data from memory to disk when there is not enough memory, and loading it back into memory when it is accessed again in the future. This is similar to what operating systems do with virtual memory and swap files, but the database can manage memory more efficiently than the OS, as it can work at the granularity of individual records rather than entire memory pages.
+
+## OLTP and OLAP
+An application typically looks up a small number of records by some key, using an index. Records are inserted or updated based on the user’s input. Because these applications are interactive, the access pattern became known as online transaction processing (OLTP).
+
+Usually an analytic query needs to scan over a huge number of records, only reading a few columns per record, and calculates aggregate statistics (such as count, sum, or average) rather than returning the raw data to the user. It has been called online analytic processing (OLAP)
+
+## Data Warehousing
+Around the 1990s, there was a trend for companies to stop using their OLTP systems for analytics purposes, and to run the analytics on a separate database instead. This separate database was called a data warehouse.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
