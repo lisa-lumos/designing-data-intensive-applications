@@ -71,17 +71,17 @@ An application typically looks up a small number of records by some key, using a
 Usually an analytic query needs to scan over a huge number of records, only reading a few columns per record, and calculates aggregate statistics (such as count, sum, or average) rather than returning the raw data to the user. It has been called online analytic processing (OLAP)
 
 ## Data Warehousing
-Around the 1990s, there was a trend for companies to stop using their OLTP systems for analytics purposes, and to run the analytics on a separate database instead. This separate database was called a data warehouse.
+Around the 1990s, there was a trend for companies to stop using their OLTP systems for analytics purposes, and to run the analytics on a separate database instead. This separate database was called a data warehouse. OLTP systems are usually expected to be highly available and to process transactions with low latency. While a data warehouse is a separate database that analysts can query to their hearts’ content, without affecting OLTP operations. The data warehouse contains a read-only copy of the data in all the various OLTP systems in the company. This process of getting data into the warehouse is known as Extract–Transform–Load (ETL). 
 
+Data warehouses now exist in almost all large enterprises, but are uncommon in small companies, because they have less OLTP systems and small amount of data. Data warehouse can be optimized for analytic access patterns.
 
+The data model of a data warehouse is most commonly relational, because SQL is generally a good fit for analytic queries.
 
+On the surface, a data warehouse and a relational OLTP database look similar, because they both have a SQL query interface. However, the internals of the systems can look quite different, because they are optimized for very different query patterns. Many database vendors now focus on supporting either transaction processing or analytics workloads, but not both.
 
+In analytics, there is much less diversity of data models than OLTP. Many data warehouses are used in a fairly formulaic style (star schema, aka dimensional modeling, with fact table and dimension tables). A variation of this star schema is the snowflake schema, where dimensions are further broken down into subdimensions. Snowflake schemas are more normalized than star schemas, but star schemas are often preferred because they are simpler for analysts to work with. 
 
-
-
-
-
-
+If you have trillions of rows and PBs of data in your fact tables, storing and querying them efficiently becomes challenging. While dimension tables are usually much smaller (millions of rows). 
 
 
 
