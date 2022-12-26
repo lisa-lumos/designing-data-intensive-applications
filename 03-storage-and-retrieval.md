@@ -83,8 +83,9 @@ In analytics, there is much less diversity of data models than OLTP. Many data w
 
 If you have trillions of rows and PBs of data in your fact tables, storing and querying them efficiently becomes challenging. While dimension tables are usually much smaller (millions of rows). 
 
+In most OLTP databases, storage is laid out in a row-oriented fashion. While for OLAP databases, it is columnar. 
 
-
+For column compression of column-oriented data, tne technique that is particularly effective in data warehouses is bitmap encoding. 
 
 
 
