@@ -83,11 +83,11 @@ In analytics, there is much less diversity of data models than OLTP. Many data w
 
 If you have trillions of rows and PBs of data in your fact tables, storing and querying them efficiently becomes challenging. While dimension tables are usually much smaller (millions of rows). 
 
-In most OLTP databases, storage is laid out in a row-oriented fashion. While for OLAP databases, it is columnar. 
+In most OLTP databases, storage is laid out in a row-oriented fashion. While for OLAP databases, it is columnar. LSM-trees is a good solution to write to columnar storage. 
 
 For column compression of column-oriented data, tne technique that is particularly effective in data warehouses is bitmap encoding. 
 
-
+To cache some of the counts or sums that queries use most often, we can use materialized view. The advantage of a materialized data cube is that certain queries become very fast because they have effectively been precomputed, but it doesn’t have the same flexibility as querying the raw data. Most data warehouses therefore try to keep as much raw data as possible, and use aggregates such as data cubes only as a performance boost for certain queries.
 
 
 
