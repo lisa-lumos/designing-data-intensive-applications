@@ -9,7 +9,9 @@ Language-specific formats for encoding: convenient, but lock you to a particular
 
 JSON, XML, and Binary Variants: JSON, XML, and CSV are textual formats, and thus human-readable. Problems: Ambiguity: Without external schema, XML & CSV cannot distinguish a num and a digit-only string; JSON cannot specify a precision, and cannot distinguish integers and floats. JSON and XML do not support binary strings, so people use base64 encoding. 
 
-Binary encoding: 
+Binary encoding: space saving is not significant, but loses human readability
+
+Apache Thrift and Protocol Buffers: require a schema, then field names are replaced by field tags (numbers) in the encoded data. Handles schema evolution: forward compatibility by ignore unknown field tags, backward compatibility by making newly added fields optional, or have a default val. You can remove an optional field, and never reuse its tag number. 
 
 
 
