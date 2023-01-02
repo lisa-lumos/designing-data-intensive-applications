@@ -17,9 +17,9 @@ Apache Avro: uses a schema to specify the structure of the data being encoded. I
 
 For dataflow through database: Schema evolution thus allows the entire database to appear as if it was encoded with a single schema, even though the underlying storage may contain records encoded with various historical versions of the schema.
 
-For dataflow through services: ...
+For dataflow through services: REST APIs and RPC 
 
-
+Message-passing dataflow: Async message brokers such as Apache Kafka. 
 
 
 
