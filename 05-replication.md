@@ -28,12 +28,18 @@ Synchronous replication: Advantage: follower is guaranteed to have up-to-date da
 
 Asynchronous replication: Advantage: leader can still process writes when follower not available. Disadvantage: if leader fails and unrecoverable, the writes that are not synced yet are lost. 
 
+## Achieve high availability with leader-based replication
+Follower failure: on local disk, each follower keeps a log of the data changes it has received from the leader. After it is back, it checks the log and get missed data changes from the leader. 
 
+Leader failure: Using failover - promote a follower to be the new leader, clients reconfigured to send writes to the new leader, other follower start to take data changes from the new leader. It can be manual or automatic. 
 
+In certain fault scenarios, it could happen that two nodes both believe that they are the leader (split brain), and it can cause lost or corrupted data. 
 
-
-
-
+## Implement Replication Logs
+- Statement-based replication: The leader logs every write request that it executes and sends this statement log to its followers. Potential issues: nondeterministic statement, order of execution. Used by VoltDB. 
+- Write-ahead log (WAL) shipping: Every write is originally appended to a log, this exact same log can be used to build a replica on another node. Potential issues: this log is low level (which bytes changed on the which disk blocks), so coupled to the storage engine. Cannot handle it if storage format of the db changes, so requires same version of db software on all nodes. Need downtime to update db versions, so no rolling upgrade possible. Used by PostgreSQL and Oracle. 
+- Logical (row-based) log replication: decouple physical storage engine and log using logical log. Allows for different storage formats on different nodes, and hence rolling upgrade. MySQL binlog when using row-based replication can do change data capture, and can send these changes to DWH for analysis. 
+- Trigger-based replication: 
 
 
 
