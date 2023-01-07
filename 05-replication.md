@@ -39,7 +39,15 @@ In certain fault scenarios, it could happen that two nodes both believe that the
 - Statement-based replication: The leader logs every write request that it executes and sends this statement log to its followers. Potential issues: nondeterministic statement, order of execution. Used by VoltDB. 
 - Write-ahead log (WAL) shipping: Every write is originally appended to a log, this exact same log can be used to build a replica on another node. Potential issues: this log is low level (which bytes changed on the which disk blocks), so coupled to the storage engine. Cannot handle it if storage format of the db changes, so requires same version of db software on all nodes. Need downtime to update db versions, so no rolling upgrade possible. Used by PostgreSQL and Oracle. 
 - Logical (row-based) log replication: decouple physical storage engine and log using logical log. Allows for different storage formats on different nodes, and hence rolling upgrade. MySQL binlog when using row-based replication can do change data capture, and can send these changes to DWH for analysis. 
-- Trigger-based replication: 
+- Trigger-based replication: Oracle GoldenGate allow app to read the database log to do custom replication. Alternative is triggers and SPs. 
+
+## Replication lag
+If an application reads from an asynchronous follower, it may see outdated information if the follower has fallen behind. The followers will eventually catch up with the leader (eventual consistency). Problems and solutions:
+- When user read their own writes, will need read-after-write consistency. Solution: read user editable contents from leader only; track last update and read from leader only if within 1 min of that; read from follower only if it's at least up to date with the last write timestamp
+- User may see things moving backward in time due to reading from different replicas, so we need monotonic reads. This guarantee is stronger than eventual consistency. Solution: each user always read from the same replica. 
+- Violation of causal dependency due to different replication lag for different writes, so we need consistent prefix reads guarantee, which maintains order in writes. It is a problem with partitioned dbs. Solution: make causal writes into the same shard. 
+
+## Solutions for Replication lag
 
 
 
