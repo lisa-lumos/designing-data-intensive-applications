@@ -47,7 +47,22 @@ If an application reads from an asynchronous follower, it may see outdated infor
 - User may see things moving backward in time due to reading from different replicas, so we need monotonic reads. This guarantee is stronger than eventual consistency. Solution: each user always read from the same replica. 
 - Violation of causal dependency due to different replication lag for different writes, so we need consistent prefix reads guarantee, which maintains order in writes. It is a problem with partitioned dbs. Solution: make causal writes into the same shard. 
 
-## Solutions for Replication lag
+Solutions for Replication lag: Database can provide stronger guarantees so that the application code can be simpler. 
+
+## Multi-Leader Replication
+With multi-leader replication, >= 2 nodes can accept writes, and forward the writes to other nodes. So that if you have multiple datacenters, you can have a leader in each datacenter, instead of only have one leader in one of the datacenters. This allow you to tolerate failure of an entire datacenter, and allow writes to be closer to your users, and tolerant to network problems. In each datacenter, regular leader-follower replication is used; while between datacenters, each datacenter's leader replicates its own changes to the leaders in other datacenters. Downside: multi-leader replication is a tricky thing to get right. Use cases also include clients with offline operation, and collaborative editing. 
+
+### Handling write conflicts
+
+
+
+
+
+
+
+
+
+
 
 
 
