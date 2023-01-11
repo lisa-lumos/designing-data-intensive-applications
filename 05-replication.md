@@ -53,7 +53,18 @@ Solutions for Replication lag: Database can provide stronger guarantees so that 
 With multi-leader replication, >= 2 nodes can accept writes, and forward the writes to other nodes. So that if you have multiple datacenters, you can have a leader in each datacenter, instead of only have one leader in one of the datacenters. This allow you to tolerate failure of an entire datacenter, and allow writes to be closer to your users, and tolerant to network problems. In each datacenter, regular leader-follower replication is used; while between datacenters, each datacenter's leader replicates its own changes to the leaders in other datacenters. Downside: multi-leader replication is a tricky thing to get right. Use cases also include clients with offline operation, and collaborative editing. 
 
 ### Handling write conflicts
+Multi-leader replication requires conflict resolution (different users applied different changes to the same item, accepted by different leaders, the conflict is detected when the changes are async replicated). Because it is async, it may be too late to ask the user to resolve the conflict. 
+- Avoid conflicts: ensure all writes for a particular record go through the same leader
+- Converge conflicts: last write wins, etc
+- Custom logic: use application code with custom logic to resolve conflicts. on write / on read
 
+### Multi-Leader Replication Topologies
+It is the communication paths along which writes are propagated from one node to another. 
+- all-to-all
+- circular
+- star
+
+## Leaderless Replication
 
 
 
