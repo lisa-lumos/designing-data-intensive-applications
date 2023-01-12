@@ -69,7 +69,7 @@ Allowing any replica to directly accept writes from clients. Examples: Dynamo st
 
 Dynamo-style databases are generally optimized for use cases that can tolerate eventual consistency. The parameters w and r allow you to adjust the probability of stale values being read, but it’s wise to not take them as absolute guarantees.
 
-
+For conflict resolution, last-write-wins may cause data loss. 
 
 
 
