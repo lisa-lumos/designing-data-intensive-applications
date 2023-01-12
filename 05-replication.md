@@ -65,9 +65,9 @@ It is the communication paths along which writes are propagated from one node to
 - star
 
 ## Leaderless Replication
+Allowing any replica to directly accept writes from clients. Examples: Dynamo style dbs: Riak, Cassandra, and Voldemort. Write requests are sent to all notes, and read requests are also sent to all nodes. In case a node has stale values, version numbers are used to determine which value is newer. If stale data are detected, "Read repair" mechanism will writes newer value to this node. Additionally, Anti-entropy process can update stale vals in the background. Uses quorum read and writes. 
 
-
-
+Dynamo-style databases are generally optimized for use cases that can tolerate eventual consistency. The parameters w and r allow you to adjust the probability of stale values being read, but it’s wise to not take them as absolute guarantees.
 
 
 
