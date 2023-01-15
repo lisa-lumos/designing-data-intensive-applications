@@ -71,7 +71,7 @@ Dynamo-style databases are generally optimized for use cases that can tolerate e
 
 For conflict resolution, last-write-wins may cause data loss. 
 
-
+Two operations are concurrent if neither happens before the other (i.e., neither knows about the other). Thus, whenever you have two operations A and B, there are three possibilities: either A happened before B, or B happened before A, or A and B are concurrent. We need to tell whether two operations are concurrent or not. If one operation happened before another, the later operation should overwrite the earlier operation, but if the operations are concurrent, we have a conflict that needs to be resolved.
 
 
 
