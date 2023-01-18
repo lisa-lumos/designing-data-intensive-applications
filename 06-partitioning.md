@@ -5,16 +5,22 @@ Normally, each piece of data (record, row, or document) belongs to exactly one p
 
 Partitioning is usually combined with replication so that copies of each partition are stored on multiple nodes. If leader-follower replication is used, each partition’s leader is assigned to one node, and its followers are assigned to other nodes. Each node may be the leader for some partitions and a follower for other partitions. The choice of partitioning scheme is mostly independent of the choice of replication scheme. 
 
+## Partitioning of Key-Value data
+Our goal with partitioning is to spread the data and the query load evenly across nodes. The presence of skew makes partitioning much less effective.
+- Partition by key range. The partition boundaries can be chosen manually, or automatically by the db. Within each partition, keys can be kept in sorted order (easy for range scans). However, certain access patterns can cause hot spots. 
+- Partition by hash of key. Used to avoid skew and hot spots. Assign each partition a range of hashes. Cannot do efficient range queries - and range query has to be sent to all partitions. Cassandra combines both ways using compound primary key. 
 
+Partition by hash of key can help reduce hot spots, but it can’t avoid them entirely, such as when a celebrity makes a tweet. For now, it is the responsibility of application to reduce the skew. 
 
+## Partitioning of Secondary Indexes
+Document-based partitioning: each partition maintains its own secondary indexes, covering only the documents in that partition. Querying a partitioned database is  known as scatter/ gather. Prone to tail latency amplification. Used by MongoDB, Riak, Cassandra, Elasticsearch, SolrCloud and VoltDB. 
 
+Term-based partitioning: construct a global index that covers data in all partitions, this global index is also partitioned. Makes read more efficient, but writes are slower. In practice, updates to global secondary indexes are often async. 
 
-
-
-
-
-
-
+## Rebalancing Partitions
+Rebalancing: moving load from one node in the cluster to another.
+- Fixed number of partitions: create many more partitions than there are nodes, and assign several partitions to each node. When a new node is added, it grabs a few partitions from each existing nodes. Used in Riak, Elasticsearch, Couchbase and Voldemort. 
+- Dynamic partitioning: 
 
 
 
