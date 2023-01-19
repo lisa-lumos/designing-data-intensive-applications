@@ -20,14 +20,14 @@ Term-based partitioning: construct a global index that covers data in all partit
 ## Rebalancing Partitions
 Rebalancing: moving load from one node in the cluster to another.
 - Fixed number of partitions: create many more partitions than there are nodes, and assign several partitions to each node. When a new node is added, it grabs a few partitions from each existing nodes. Used in Riak, Elasticsearch, Couchbase and Voldemort. 
-- Dynamic partitioning: 
+- Dynamic partitioning: When a partition grows to exceed a configured size, it is then divided into two partitions; shrinked partitions can also be merged into one. So the number of partitions adapts to the total data volume. Used in HBase and RethinkDB. 
+- Fixed number of partitions per node. Used by Cassandra and Ketama. 
 
+Couchbase, Riak, and Voldemort generate a suggested partition assignment automatically, but require an administrator to commit it before it takes effect. It can be a good thing to have a human in the loop for rebalancing. It’s slower than a fully automatic process, but it can help prevent operational surprises.
 
+Request routing (service discovery) - Many distributed data systems (Espresso, HBase, SolrCloud, Kafka) rely on a separate coordination service such as ZooKeeper to keep track of this cluster metadata. Each node registers itself in ZooKeeper, and ZooKeeper maintains the authoritative mapping of partitions to nodes. Cassandra and Riak use a gossip protocol among the nodes to disseminate any changes in cluster state, which avoids the dependency on an external coordination service such as ZooKeeper.
 
-
-
-
-
+The MPP query optimizer (for analytics) breaks this complex query into a number of execution stages and partitions, many of which can be executed in parallel on different nodes of the database cluster. Queries that involve scanning over large parts of the dataset particularly benefit from such parallel execution.
 
 
 
