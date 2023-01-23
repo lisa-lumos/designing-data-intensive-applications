@@ -43,7 +43,7 @@ The database must potentially keep several different committed versions of an ob
 
 Many dbs that implement snapshot isolation call it by different names. In Oracle it is called `serializable`, and in PostgreSQL and MySQL it is called `repeatable read`. 
 
-The `lost update problem` can occur if an application reads some value from the database, modifies it, and writes back the modified value (a read-modify-write cycle). If two transactions do this concurrently, one of the modifications can be lost, because the second write does not include the first modification. Cases are:
+The `lost update problem` can occur if an application reads some value from the database, modifies it, and writes back the modified value (a read-modify-write cycle). If two transactions do this concurrently, for the same record, one of the modifications can be lost, because the second write does not include the first modification. Cases are:
 - Incrementing a counter or updating an account balance (a read-modify-write cycle)
 - Making a local change to a complex value, e.g., adding an element to a list within a JSON document (requires parsing the document, making the change, and writing back the modified document)
 - Two users editing a wiki page at the same time, where each user saves their changes by sending the entire page contents to the server, overwriting whatever is currently in the database. 
@@ -54,12 +54,14 @@ Solutions to the `lost update problem`:
 - Automatically detect lost updates: allow transactions to execute in parallel, and if the transaction manager detects a lost update, abort the transaction and force it to retry. This is less error prone compared with the first two solutions. PostgreSQL's repeatable read, Oracle's serializable, and SQL Server's snapshot isolation levels automatically do this. But MySQL, InnoDB's repeatable read doesn't do this. 
 - Compare-and-set: in dbs that do not provide transactions, it avoids lost updates by allowing an update to happen only if the value has not changed since you last read it. It may not be safe, depends on the db. eg: UPDATE wiki_pages SET content = 'new content' WHERE id = 1234 AND content = 'old content';
 
+For replicated dbs, to prevent lost updates, a common approach is to allow concurrent writes to create several conflicting versions of a value (siblings), and to use application code or special data structures to resolve and merge these versions after the fact. 
 
+`Write skew`: concurrent multi-object updates that violates a pre-checked condition: 
+- A hospital must have at least one doctor on call. Doctor A and Doctor B both check how many doctors are there at the same time, and both request leave at the same time, resulting 0 doctor on call. They both modified their own records via a transaction, so it is neither a dirty write nor a lost update. 
+- Meeting room booking system: two users concurrently inserting a conflicting meeting. 
+- Multiplayer game: two players move different chess to the same position. 
+- Claiming a username: two new user concurrently choose a same user name. Can use unique constraint to avoid this one. 
 
-
-
-
-
-
+Automatically preventing write skew requires true serializable isolation. If you can’t use a serializable isolation level, the second-best option in this case is probably to explicitly lock the rows that the transaction depends on, using the FOR UPDATE clause. 
 
 
