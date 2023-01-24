@@ -62,6 +62,51 @@ For replicated dbs, to prevent lost updates, a common approach is to allow concu
 - Multiplayer game: two players move different chess to the same position. 
 - Claiming a username: two new user concurrently choose a same user name. Can use unique constraint to avoid this one. 
 
-Automatically preventing write skew requires true serializable isolation. If you can’t use a serializable isolation level, the second-best option in this case is probably to explicitly lock the rows that the transaction depends on, using the FOR UPDATE clause. 
+`Phantom`: the result of a search query in a transaction is no longer valid after a write in another transaction. Snapshot isolation can cause write skew in such read-write transactions. 
+
+Solution: 
+- Automatically preventing write skew requires true serializable isolation. 
+- If you can’t use a serializable isolation level, you can explicitly lock the rows that the transaction depends on, using the FOR UPDATE clause (only doable if there are objects/rows to attach lock to). 
+- Materializing conflicts: If there is no object to attach the locks, you can create (materialize) rows, such as creating rows for each time slots. This lets a concurrency control mechanism leak into the application level, so it is not recommended to do this. Recommend serializable isolation in this case. 
+
+## Serializable isolation
+The strongest isolation level that prevents all possible race conditions. It guarantees that even though transactions may execute in parallel, the end result is the same as if they had executed one at a time, serially. 
+
+There are 3 techniques to implement it:
+- Literally executing transactions in a serial order, on a single thread. Avoids the coordination overhead, but throughput is limited to a single CPU core (can be resolved by partitioning, if you can make them independent of each other). Systems with single-threaded serial transaction processing don’t allow interactive multi-statement transactions, because humans and networks are slow; instead, the app use a stored procedure. Used by VoltDB/H-Store, Redis and Datomic. 
+- Two-phase locking. 
+- Use optimistic concurrency control such as serializable snapshot isolation. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
