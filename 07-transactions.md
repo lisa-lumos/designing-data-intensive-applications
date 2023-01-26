@@ -74,23 +74,25 @@ The strongest isolation level that prevents all possible race conditions. It gua
 
 There are 3 techniques to implement it:
 - Literally executing transactions in a serial order, on a single thread. Avoids the coordination overhead, but throughput is limited to a single CPU core (can be resolved by partitioning, if you can make them independent of each other). Systems with single-threaded serial transaction processing don’t allow interactive multi-statement transactions, because humans and networks are slow; instead, the app use a stored procedure. Used by VoltDB/H-Store, Redis and Datomic. 
-- Two-phase locking. 
+- `Two-phase locking (2PL)`. Details see below. 
 - Use optimistic concurrency control such as serializable snapshot isolation. 
 
+### Two-phase locking (2PL)
+Two-phase locking, several transactions are allowed to concurrently read the same object as long as nobody is writing to it. But as soon as anyone wants to write (modify or delete) an object, exclusive access is required:
+- If transaction A has read an object and transaction B wants to write to that object, B must wait until A commits or aborts before it can continue. This ensures that B can’t change the object unexpectedly behind A’s back.
+- If transaction A has written an object and transaction B wants to read that object, B must wait until A commits or aborts before it can continue. Reading an old version of the object is not acceptable under 2PL.
 
+In 2PL, writers block both other writers and other readers. Readers in a transaction block other writers. 
 
+2PL is used by the serializable isolation level in MySQL (InnoDB) and SQL Server, and the repeatable read isolation level in DB2. 
 
+The blocking of readers and writers is implemented by a having a lock on each object in the database. The lock can either be in shared mode (shared lock for readers) or in exclusive mode. If a transaction wants to write to an object, it must first acquire the lock in exclusive mode. After a transaction has acquired the lock, it must continue to hold the lock until the end of the transaction (commit or abort). This is where the name “two-phase” comes from: the first phase (while the transaction is executing) is when the locks are acquired, and the second phase (at the end of the transaction) is when all the locks are released.
 
+Transaction throughput and response times of queries are significantly worse under two-phase locking than under weak isolation. Because human input may be involved, databases running 2PL can have quite unstable latencies, and they can be very slow at high percentiles. 
 
+A `predicate lock` restricts access as follows: if transaction A wants to read objects matching some condition, like in that SELECT query, it must acquire a shared-mode predicate lock on the conditions of the query. If another transaction B currently has an exclusive lock on any object matching those conditions, A must wait until B releases its lock before it is allowed to make its query. If transaction A wants to insert, update, or delete any object, it must first check whether either the old or the new value matches any existing predicate lock. If there is a matching predicate lock held by transaction B, then A must wait until B has committed or aborted before it can continue. The key idea here is that a predicate lock applies even to objects that do not yet exist in the database, but which might be added in the future (phantoms).
 
-
-
-
-
-
-
-
-
+most databases with 2PL implement `index-range locking` (next-key locking), which is a simplified approximation of predicate locking. 
 
 
 
