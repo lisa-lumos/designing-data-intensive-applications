@@ -1,4 +1,6 @@
 # 7. Transactions
+This chapter talks about ideas and algorithms mostly in the context of a database running on a single machine.
+
 A `transaction` a mechanism for grouping multiple operations on multiple objects into one unit of execution. All the reads and writes in a transaction are executed as one operation: either the entire transaction succeeds (commit) or it fails (abort, rollback). If it fails, the application can safely retry. With transactions, application doesn't need to worry about partial failure. 
 
 Historically, the safety guarantees provided by transactions are known as ACID, which is vague: 
@@ -75,7 +77,7 @@ The strongest isolation level that prevents all possible race conditions. It gua
 There are 3 techniques to implement it:
 - Literally executing transactions in a serial order, on a single thread. Avoids the coordination overhead, but throughput is limited to a single CPU core (can be resolved by partitioning, if you can make them independent of each other). Systems with single-threaded serial transaction processing don’t allow interactive multi-statement transactions, because humans and networks are slow; instead, the app use a stored procedure. Used by VoltDB/H-Store, Redis and Datomic. 
 - `Two-phase locking (2PL)`. Details see below. 
-- Use optimistic concurrency control such as serializable snapshot isolation. 
+- Use optimistic concurrency control such as `serializable snapshot isolation`. Details see below. 
 
 ### Two-phase locking (2PL)
 Two-phase locking, several transactions are allowed to concurrently read the same object as long as nobody is writing to it. But as soon as anyone wants to write (modify or delete) an object, exclusive access is required:
@@ -94,10 +96,14 @@ A `predicate lock` restricts access as follows: if transaction A wants to read o
 
 most databases with 2PL implement `index-range locking` (next-key locking), which is a simplified approximation of predicate locking. 
 
+### Serializable Snapshot Isolation (SSI)
+It provides full serializability, but has only a small performance penalty compared to snapshot isolation.
 
+There may be a causal dependency between the queries and the writes in the transaction.
 
+Optimistic means that instead of blocking if something potentially dangerous happens, transactions continue anyway, hoping that everything will be fine. When a transaction wants to commit, the database checks whether anything bad happened (i.e., whether isolation was violated); if so, the transaction is aborted and has to be retried. Only transactions that executed serializably are allowed to commit.
 
-
+Compared to two-phase locking, the big advantage of serializable snapshot isolation is that one transaction doesn’t need to block waiting for locks held by another transaction. Like under snapshot isolation, writers don’t block readers, and vice versa. This design principle makes query latency much more predictable and less variable. In particular, read-only queries can run on a consistent snapshot without requiring any locks, which is very appealing for read-heavy workloads.
 
 
 
