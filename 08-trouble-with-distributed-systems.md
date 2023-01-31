@@ -28,17 +28,30 @@ You need to know how your software reacts to network problems and ensure that th
 
 Many systems need to automatically detect faulty nodes.
 
+In public clouds and multi-tenant datacenters, resources are shared among many customers: the network links and switches, and even each machine’s network interface and CPUs (when running on virtual machines), are shared. Batch workloads such as MapReduce can easily saturate network links. As you have no control over or insight into other customers’ usage of the shared resources, network delays can be highly variable if someone near you (a noisy neighbor) is using a lot of resources. 
 
+Variable delays in networks are not a law of nature, but simply the result of a cost/ benefit trade-off. Currently deployed technology does not allow us to make any guarantees about delays or reliability of the network: we have to assume that network congestion, queueing, and unbounded delays will happen. Consequently, there’s no “correct” value for timeouts—they need to be determined experimentally.
 
+## Unreliable Clocks
+The time when a message is received is always later than the time when it is sent, but due to variable delays in the network, we don’t know how much later.
 
+Each machine on the network has its own clock, which is an actual hardware device: usually a quartz crystal oscillator. These devices are not perfectly accurate. 
 
+It is possible to synchronize clocks to some degree: the most commonly used mechanism is the Network Time Protocol (NTP), which allows the computer clock to be adjusted according to the time reported by a group of servers. 
 
+Modern computers have at least two different kinds of clocks: a time-of-day clock and a monotonic clock.
 
+If the local clock is too far ahead of the NTP server, it may be forcibly reset and appear to jump back to a previous point in time. These jumps, as well as the fact that they often ignore leap seconds, make time-of-day clocks unsuitable for measuring elapsed time. 
 
+A monotonic clock is suitable for measuring a duration (time interval), such as a timeout or a service’s response time. The name comes from the fact that they are guaranteed to always move forward (whereas a time-of-day clock may jump back in time).
 
+Logical clocks are based on incrementing counters rather than an oscillating quartz crystal, so they are a safer alternative for ordering events. Logical clocks do not measure the time of day or the number of seconds elapsed, only the relative ordering of events. 
 
+Time-of-day and monotonic clocks, which measure actual elapsed time, are also known as physical clocks.
 
+Google’s TrueTime API in Spanner explicitly reports the confidence interval on the local clock. When you ask it for the current time, you get back two values: [earliest, latest], which are the earliest possible and the latest possible timestamp.
 
+Developing real-time systems is very expensive, and they are most commonly used in safety-critical embedded devices.
 
 
 
