@@ -53,9 +53,9 @@ Google’s TrueTime API in Spanner explicitly reports the confidence interval on
 
 Developing real-time systems is very expensive, and they are most commonly used in safety-critical embedded devices.
 
+`Fencing tokens` can be used to protect access to some resource, in case a node claims itself as the leader while in fact it is not. 
 
-
-
+Distributed systems problems become much harder if there is a risk that nodes may “lie” (send arbitrary faulty or corrupted responses)—for example, if a node may claim to have received a particular message when in fact it didn’t. Such behavior is known as a `Byzantine fault`. 
 
 
 
