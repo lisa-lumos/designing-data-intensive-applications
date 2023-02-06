@@ -57,9 +57,10 @@ Developing real-time systems is very expensive, and they are most commonly used 
 
 Distributed systems problems become much harder if there is a risk that nodes may “lie” (send arbitrary faulty or corrupted responses)—for example, if a node may claim to have received a particular message when in fact it didn’t. Such behavior is known as a `Byzantine fault`. 
 
+## System Model and Reality
+For modeling real systems, the partially synchronous model with crash-recovery faults is generally the most useful model.
 
-
-
+Safety is often informally defined as nothing bad happens, and liveness as something good eventually happens.
 
 
 
