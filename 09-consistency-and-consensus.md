@@ -14,13 +14,16 @@ Make a system appear as if there were only one copy of the data, and all operati
 
 Maintaining the illusion of a single copy of the data means guaranteeing that the value read is the most recent, up-to-date value, and doesn’t come from a stale cache or replica.
 
+A system that uses single-leader replication needs to ensure that there is indeed only one leader, not several (split brain). One way of electing a leader is to use a lock. No matter how this lock is implemented, it must be linearizable: all nodes must agree which node owns the lock; otherwise it is useless.
 
+Coordination services like Apache ZooKeeper and etcd are often used to implement distributed locks and leader election.
 
+If you want to enforce unique constraint as the data is written (such that if two people try to concurrently create a user or a file with the same name, one of them will be returned an error), you need linearizability. Similar issues arise if you want to ensure that a bank account balance never goes negative, or that you don’t sell more items than you have in stock in the warehouse, or that two people don’t concurrently book the same seat on a flight or in a theater.
 
-
-
-
-
+Implement linearizable systems: 
+- Consensus algorithms can implement linearizable storage safely. This is how ZooKeeper and etcd work. 
+- Systems with multi-leader replication are generally not linearizable, because they concurrently process writes on multiple nodes and asynchronously replicate them to other nodes.
+- Leaderless replication is probably not linearizable, considering network delays and clock skew. 
 
 
 
