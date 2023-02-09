@@ -25,6 +25,21 @@ Implement linearizable systems:
 - Systems with multi-leader replication are generally not linearizable, because they concurrently process writes on multiple nodes and asynchronously replicate them to other nodes.
 - Leaderless replication is probably not linearizable, considering network delays and clock skew. 
 
+Linearizability is slow — and this is true all the time, not only during a network fault.
+
+## Ordering Guarantees
+There are deep connections between ordering, linearizability, and consensus.
+
+A total order allows any two elements to be compared. In a linearizable system, we have a total order of operations. Causality defines a partial order, not a total order. 
+
+Causal consistency is the strongest possible consistency model that does not slow down due to network delays, and remains available in the face of network failures. 
+
+The key idea about Lamport timestamps, which makes them consistent with causality, is the following: every node and every client keeps track of `the maximum counter value it has seen so far`, and includes that maximum on every request. When a node receives a request or response with a maximum counter value greater than its own counter value, it immediately increases its own counter to that maximum.
+
+
+
+
+
 
 
 
