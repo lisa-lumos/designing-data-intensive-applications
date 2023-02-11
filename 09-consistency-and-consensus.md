@@ -34,15 +34,17 @@ A total order allows any two elements to be compared. In a linearizable system, 
 
 Causal consistency is the strongest possible consistency model that does not slow down due to network delays, and remains available in the face of network failures. 
 
-The key idea about Lamport timestamps, which makes them consistent with causality, is the following: every node and every client keeps track of `the maximum counter value it has seen so far`, and includes that maximum on every request. When a node receives a request or response with a maximum counter value greater than its own counter value, it immediately increases its own counter to that maximum.
+The key idea about Lamport timestamps, which makes them consistent with causality, is the following: every node and every client keeps track of `the maximum counter value it has seen so far`, and includes that maximum on every request. When a node receives a request or response with a maximum counter value greater than its own counter value, it immediately increases its own counter to that maximum. Lamport timestamps always enforce a total ordering.
 
+Problem: The problem here is that the total order of operations only emerges after you have collected all of the operations. If another node has generated some operations, but you don’t yet know what they are, you cannot construct the final ordering of operations: the unknown operations from the other node may need to be inserted at various positions in the total order. When a node has just received a request from a user to create a username, and needs to decide right now whether the request should succeed or fail. At that moment, the node does not know whether another node is concurrently in the process of creating an account with the same username, and what timestamp that other node may assign to the operation.
 
+To conclude: in order to implement something like a uniqueness constraint for usernames, it’s not sufficient to have a total ordering of operations—you also need to know when that order is finalized.
 
+Total Order Broadcast/atomic broadcast: Usually described as a protocol for exchanging messages between nodes. It must ensure that the reliability (no messages are lost) and ordering properties (messages are delivered to the every node in the same order) are always satisfied, even if a node or the network is faulty.
 
+Consensus services such as ZooKeeper and etcd implement total order broadcast. 
 
-
-
-
+Total order broadcast is asynchronous: messages are guaranteed to be delivered reliably in a fixed order, but there is no guarantee about when a message will be delivered (so one recipient may lag behind the others). By contrast, linearizability is a recency guarantee: a read is guaranteed to see the latest value written.
 
 
 
