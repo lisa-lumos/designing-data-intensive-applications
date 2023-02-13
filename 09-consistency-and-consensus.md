@@ -46,14 +46,15 @@ Consensus services such as ZooKeeper and etcd implement total order broadcast.
 
 Total order broadcast is asynchronous: messages are guaranteed to be delivered reliably in a fixed order, but there is no guarantee about when a message will be delivered (so one recipient may lag behind the others). By contrast, linearizability is a recency guarantee: a read is guaranteed to see the latest value written.
 
+A linearizable compare-and-set register and total order broadcast are both equivalent to consensus. 
 
+## Distributed Transactions and Consensus
+- Leader election: Consensus is important to avoid a bad failover, resulting in a split brain situation in which two nodes both believe themselves to be the leader. 
+- Atomic commit: In a database that supports transactions spanning several nodes or partitions, we have the problem that a transaction may fail on some nodes but succeed on others. If we want to maintain transaction atomicity, we have to get all nodes to agree on the outcome of the transaction: either they all abort/roll back (if anything goes wrong) or they all commit (if nothing goes wrong). This instance of consensus is known as the atomic commit problem.
 
+Distributed systems can usually achieve consensus in practice.
 
-
-
-
-
-
+`Two-phase commit` is an algorithm for achieving atomic transaction commit across multiple nodes—i.e., to ensure that either all nodes commit or all nodes abort.
 
 
 
