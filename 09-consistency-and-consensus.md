@@ -62,13 +62,15 @@ X/Open XA (eXtended Architecture) is a standard for implementing two-phase commi
 
 The consensus problem is normally formalized as follows: one or more nodes may propose values, and the consensus algorithm decides on one of those values. The core idea of consensus: everyone decides on the same outcome, and once you have decided, you cannot change your mind. A large-scale outage can stop the system from being able to process requests, but it cannot corrupt the consensus system by causing it to make invalid decisions.
 
+Consensus systems always require a strict majority to operate. Sometimes, consensus algorithms are particularly sensitive to network problems. 
 
+ZooKeeper and etcd are designed to hold small amounts of data that can fit entirely in memory (although they still write to disk for durability)—so you wouldn’t want to store all of your application’s data here. That small amount of data is replicated across all the nodes using a fault-tolerant total order broadcast algorithm. Total order broadcast is what you need for database replication. 
 
+Trying to perform majority votes over so many nodes would be terribly inefficient. Instead, ZooKeeper runs on a fixed number of nodes (usually three or five) and performs its majority votes among those nodes while supporting a potentially large number of clients.
 
+ZooKeeper, etcd, and Consul are also often used for service discovery—that is, to find out which IP address you need to connect to in order to reach a particular service. 
 
-
-
-
+A membership service determines which nodes are currently active and live members of a cluster.
 
 
 
