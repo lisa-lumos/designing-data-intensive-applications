@@ -10,9 +10,11 @@ Three different types of systems:
 - Batch processing systems (offline systems). Takes a large amount of input data, runs a job to process it, and produces some output data. Often scheduled to run periodically. The primary performance measure of a batch job is usually throughput. 
 - Stream processing systems (near-real-time systems). A stream processor consumes inputs and produces outputs. 
 
+The Unix philosophy: Automation, rapid prototyping, incremental iteration, being friendly to experimentation, and breaking down large projects into manageable chunks - sounds remarkably like the Agile and DevOps movements of today.
 
+A Unix shell like bash lets us easily compose these small programs into surprisingly powerful data processing jobs.
 
-
+If you expect the output of one program to become the input to another program, that means those programs must use the same data format—in other words, a compatible interface. In Unix, that interface is a file. 
 
 
 
