@@ -16,13 +16,16 @@ A Unix shell like bash lets us easily compose these small programs into surprisi
 
 If you expect the output of one program to become the input to another program, that means those programs must use the same data format—in other words, a compatible interface. In Unix, that interface is a file. 
 
+Separating the input/output wiring from the program logic makes it easier to compose small tools into bigger systems. However, the biggest limitation of Unix tools is that they run only on a single machine—and that’s where tools like Hadoop come in.
 
+## MapReduce and distributed file systems
+MapReduce is a bit like Unix tools, but distributed across potentially thousands of machines. MapReduce is a programming framework with which you can write code to process large datasets in a distributed filesystem like HDFS. A single MapReduce job is comparable to a single Unix process: it takes one or more inputs and produces one or more outputs. A MapReduce job normally does not modify the input and does not have any side effects other than producing the output.
 
+While Unix tools use stdin and stdout as input and output, MapReduce jobs read and write files on a distributed filesystem. In Hadoop’s implementation of MapReduce, that filesystem is called HDFS (Hadoop Distributed File System). HDFS is based on the shared-nothing principle, which requires no special hardware, only computers connected by a conventional datacenter network. In order to tolerate machine and disk failures, file blocks are replicated on multiple machines. 
 
+To create a MapReduce job, you need to implement two callback functions, the mapper and reducer. 
 
-
-
-
+The main difference from pipelines of Unix commands is that MapReduce can parallelize a computation across many machines, without you having to write code to explicitly handle the parallelism.
 
 
 
