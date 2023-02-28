@@ -27,7 +27,9 @@ To create a MapReduce job, you need to implement two callback functions, the map
 
 The main difference from pipelines of Unix commands is that MapReduce can parallelize a computation across many machines, without you having to write code to explicitly handle the parallelism.
 
+It is very common for MapReduce jobs to be chained together into workflows, such that the output of one job becomes the input to the next job, like a sequence of commands where each command’s output is written to a temporary file, and the next command reads from the temporary file. To handle these dependencies between job executions, various workflow schedulers for Hadoop have been developed, including Oozie, Azkaban, Luigi, Airflow, and Pinball. 
 
+In order to achieve good throughput in a batch process, the computation must be (as much as possible) local to one machine.
 
 
 
