@@ -31,7 +31,7 @@ It is very common for MapReduce jobs to be chained together into workflows, such
 
 In order to achieve good throughput in a batch process, the computation must be (as much as possible) local to one machine.
 
-
+A workflow of MapReduce jobs is not the same as a SQL query used for analytic purposes. The output of a batch process is often not a report, but some other kind of structure.
 
 
 
