@@ -33,7 +33,7 @@ In order to achieve good throughput in a batch process, the computation must be 
 
 A workflow of MapReduce jobs is not the same as a SQL query used for analytic purposes. The output of a batch process is often not a report, but some other kind of structure.
 
-
+Collecting data in its raw form, and worrying about schema design later, allows the data collection to be speeded up (known as a “data lake” or “enterprise data hub”. Thus, Hadoop has often been used for implementing ETL processes: data from transaction processing systems is dumped into the distributed filesystem in some raw form, and then MapReduce jobs are written to clean up that data, transform it into a relational form, and import it into an MPP data warehouse for analytic purposes. Data modeling still happens, but it is in a separate step, decoupled from the data collection. This decoupling is possible because a distributed filesystem supports data encoded in any format.
 
 
 
