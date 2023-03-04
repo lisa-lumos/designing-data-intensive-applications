@@ -35,7 +35,9 @@ A workflow of MapReduce jobs is not the same as a SQL query used for analytic pu
 
 Collecting data in its raw form, and worrying about schema design later, allows the data collection to be speeded up (known as a “data lake” or “enterprise data hub”. Thus, Hadoop has often been used for implementing ETL processes: data from transaction processing systems is dumped into the distributed filesystem in some raw form, and then MapReduce jobs are written to clean up that data, transform it into a relational form, and import it into an MPP data warehouse for analytic purposes. Data modeling still happens, but it is in a separate step, decoupled from the data collection. This decoupling is possible because a distributed filesystem supports data encoded in any format.
 
+The MapReduce approach is more appropriate for larger jobs: jobs that process so much data and run for such a long time that they are likely to experience at least one task failure along the way. Overcommitting resources allows better utilization of machines and greater efficiency compared to systems that segregate production and nonproduction tasks. However, as MapReduce jobs run at low priority, they run the risk of being preempted at any time because a higher-priority process requires their resources.
 
+The process of writing out intermediate state to files is called materialization.
 
 
 
