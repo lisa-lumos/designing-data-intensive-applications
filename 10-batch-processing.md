@@ -39,7 +39,7 @@ The MapReduce approach is more appropriate for larger jobs: jobs that process so
 
 The process of writing out intermediate state to files is called materialization.
 
-
+To fix these problems with MapReduce, data flow engines for distributed batch computations were developed, such as Spark, Tez and Flink. They handle an entire workflow as one job, rather than breaking it up into independent subjobs.
 
 
 
