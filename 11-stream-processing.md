@@ -1,0 +1,36 @@
+# 11. Stream Processing
+In reality, a lot of data is unbounded because it arrives gradually over time. In general, a “stream” refers to data that is incrementally made available over time. In a stream processing context, a record is more commonly known as an event. An event is generated once by a producer (also known as a publisher or sender), and then potentially processed by multiple consumers (subscribers or recipients). Related events are usually grouped together into a topic or stream.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
