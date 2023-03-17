@@ -19,6 +19,8 @@ If you only ever append to the log, you will eventually run out of disk space. T
 
 If a consumer does fall too far behind and starts missing messages, only that consumer is affected; it does not disrupt the service for other consumers. This fact is a big operational advantage: you can experimentally consume a production log for development, testing, or debugging purposes, without having to worry much about disrupting production services. When a consumer is shut down or crashes, it stops consuming resources—the only thing that remains is its consumer offset.
 
+More recently, there has been growing interest in change data capture (CDC), which is the process of observing all data changes written to a database and extracting them in a form in which they can be replicated to other systems. CDC is especially interesting if changes are made available as a stream, immediately as they are written. The derived data systems are just consumers of the change stream. Essentially, change data capture makes one database the leader (the one from which the changes are captured), and turns the others into followers.
+
 
 
 
