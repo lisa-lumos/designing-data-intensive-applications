@@ -21,11 +21,11 @@ If a consumer does fall too far behind and starts missing messages, only that co
 
 More recently, there has been growing interest in change data capture (CDC), which is the process of observing all data changes written to a database and extracting them in a form in which they can be replicated to other systems. CDC is especially interesting if changes are made available as a stream, immediately as they are written. The derived data systems are just consumers of the change stream. Essentially, change data capture makes one database the leader (the one from which the changes are captured), and turns the others into followers.
 
+Log compaction is supported by Apache Kafka - it allows the message broker to be used for durable storage, not just for transient messaging.
 
+API support for change streams - Increasingly, databases are beginning to support change streams as a first-class interface. For example, RethinkDB allows queries to subscribe to notifications when the results of a query change, Firebase and CouchDB provide data synchronization based on a change feed that is also made available to applications, and Meteor uses the MongoDB oplog to subscribe to data changes and update the user interface. 
 
-
-
-
+In event sourcing, the application logic is explicitly built on the basis of immutable events that are written to an event log. The event store is append-only, and updates or deletes are discouraged or prohibited. Events are designed to reflect things that happened at the application level, rather than low-level state changes in CDC. Event sourcing is a powerful technique for data modeling: from an application point of view it is more meaningful to record the user’s actions as immutable events. Applications that use event sourcing need to take the log of events and transform it into application state that is suitable for showing to a user. 
 
 
 
