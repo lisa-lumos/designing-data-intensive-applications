@@ -27,7 +27,7 @@ API support for change streams - Increasingly, databases are beginning to suppor
 
 In event sourcing, the application logic is explicitly built on the basis of immutable events that are written to an event log. The event store is append-only, and updates or deletes are discouraged or prohibited. Events are designed to reflect things that happened at the application level, rather than low-level state changes in CDC. Event sourcing is a powerful technique for data modeling: from an application point of view it is more meaningful to record the user’s actions as immutable events. Applications that use event sourcing need to take the log of events and transform it into application state that is suitable for showing to a user. 
 
-
+A stream processor consumes input streams in a read-only fashion and writes its output to a different location in an append-only fashion. The one crucial difference to batch jobs is that a stream never ends.
 
 
 
