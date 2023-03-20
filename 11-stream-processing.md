@@ -29,6 +29,8 @@ In event sourcing, the application logic is explicitly built on the basis of imm
 
 A stream processor consumes input streams in a read-only fashion and writes its output to a different location in an append-only fashion. The one crucial difference to batch jobs is that a stream never ends.
 
+In principle, any stream processor could be used for materialized view maintenance. 
+
 
 
 
