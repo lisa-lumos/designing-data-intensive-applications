@@ -31,11 +31,11 @@ A stream processor consumes input streams in a read-only fashion and writes its 
 
 In principle, any stream processor could be used for materialized view maintenance. 
 
+Joins can be stream-stream join, stream-table join, and table-table join. The stream processor’s local copy of the database needs to be kept up to date. This issue can be solved by change data capture. 
 
+If the ordering of events across streams is undetermined, the join becomes nondeterministic, which means you cannot rerun the same job on the same input and necessarily get the same result: the events on the input streams may be interleaved in a different way when you run the job again. In data warehouses, this issue is known as a slowly changing dimension (SCD), and it is often addressed by using a unique identifier for a particular version of the joined record. 
 
-
-
-
+An idempotent operation is one that you can perform multiple times, and it has the same effect as if you performed it only once.
 
 
 
