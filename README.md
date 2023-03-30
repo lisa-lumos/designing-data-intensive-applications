@@ -1,5 +1,5 @@
 # Designing data intensive applications
-Notes for the book written by Martin Cleppmann. Notes are taken when I read the book for the 2nd time. 
+Notes for the book written by Martin Cleppmann. 
 
 ## 0. Preface
 - What is book is about. 
