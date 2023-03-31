@@ -14,23 +14,23 @@ Many factors influence the design of a data system, depend on the situation:
 - ...
 
 There are 3 concerns that are important in most software systems: 
-1. **Reliability** - The system should continue to work correctly (performing the correct function at the desired level of performance) even when thing go wrong (hardware or software faults, and human error).
-2. **Scalability** - As the system grows (in data/traffic volume, or complexity), there should be reasonable ways of dealing with that growth.
-3. **Maintainability** - Over time, many different people will work on the system (engineering and operations, both maintaining current behavior and adapting the system to new use cases), and they should all be able to work on it productively.
+1. **Reliable** - continue to work correctly even when things go wrong (hardware/software faults, and human error).
+2. **Scalable** - as the system grows (in data/traffic volume, or complexity), there should be ways to deal with it.
+3. **Maintainable** - Over time, many different people will work on the system (engineering and ops, both maintaining current behavior and adapting the system to new use cases), and they should all be able to work on it productively.
 
 ## Reliability
-Bugs in business applications cause lost productivity,and legal risks if figures are reported incorrectly; and outages of e-commerce sites can have huge costs in terms of lost revenue and damage to reputation.
+Bugs in business applications cause lost productivity, and legal risks if numbers are reported incorrectly; outages of e-commerce sites can have huge costs in lost revenue and damage to reputation.
 
-A `fault` is usually defined as one component of the system deviating from its spec, whereas a `failure` is when the system as a whole stops providing the required service to the user.
+A `fault` is one component of the system not working; a `failure` is when the whole system stops working.
 
-For `hardware faults`, we usually to add `redundancy` to the individual hardware components in order to reduce the failure rate of the system. It makes total failure of `a single machine` fairly rare (but needs planned downtime). But more applications have begun using `larger numbers of machines`, which proportionally increases the rate of hardware faults - Hence there is a move toward systems that can `tolerate the loss of entire machines`, by using software fault-tolerance techniques in preference or in addition to hardware redundancy (allows for rolling upgrade).
+For `hardware faults`, we can add `redundancy` to the individual hardware components to reduce the failure rate of the system. It makes total failure of `a single machine` fairly rare (but needs planned downtime). But more applications have begun using `larger numbers of machines`, which proportionally increases the rate of hardware faults - Hence there is a move toward systems that can `tolerate the loss of entire machines`, by using software fault-tolerance techniques, or in addition to hardware redundancy (allows for rolling upgrade).
 
-For `software errors`, the bugs often lie dormant for a long time until they are triggered by an unusual set of circumstances. There is no quick solution to the problem of systematic faults in software. Lots of small things can help: carefully thinking about assumptions and interactions in the system; thorough testing; process isolation; allowing processes to crash and restart; measuring, monitoring, and analyzing system behavior in production.
+For `software errors`, the bugs often hide for a long time until they are triggered by an unusual set of circumstances. There is no quick solution to it. Small things can help: carefully thinking about assumptions and interactions in the system; thorough testing; process isolation; allowing processes to crash and restart; measuring, monitoring, and analyzing system behavior in production.
 
 For `human errors`, we could Design systems in a way that minimizes opportunities for error; use sandbox environments; test thoroughly; Allow quick and easy recovery; set up detailed and clear monitoring; implement good management practices and training; etc. 
 
 ## Scalability
-`Scalability` is the term we use to describe a system’s ability to `cope with increased load`. Discussing scalability means considering questions like “If the system grows in a particular way, what are our options for coping with the growth?” and “How can we add computing resources to handle the additional load?” 
+`Scalability` describes a system’s ability to `cope with increased load`. E.g.: “If the system grows in a particular way, what are our options for coping with the growth?” and “How can we add computing resources to handle the additional load?” 
 
 `Load` can be described with a few load parameters. The best choice of parameters (requests per sec, ratio of reads to writes, num of concurrent active users, ...) depends on the architecture of your system. 
 
@@ -40,9 +40,9 @@ An example: Implementing Twitter. Twitter’s scaling challenge is due to fan-ou
 
 However, for v2, celebrities have millions of followers makes updating cache time-consuming. So they use hybrid v1 (for celebrities) and v2 (for regular users) approach. 
 
-Describing the performance of a system: In online systems, service’s `response time` is important (the time between a client sending a request and receiving a response). Response time is not as a single number, but a distribution of values (better in percentiles) that you can measure. `High percentiles` of response times, also known as tail latencies, are important because they directly affect users’ experience of the service. Queueing delays often account for a large part of the response time at high percentiles.
+Describing the performance of a system: In online systems, service’s `response time` is important (the time between request sent and response received). Response time is a distribution of values (better in percentiles). `High percentiles` of response times  (tail latencies) are important because they directly affect users’ experience of the service. Queueing delays often takes a large part of the response time at high percentiles.
 
-The `response time` is what the `client sees`: besides the actual time to process the request, it includes network delays and queueing delays. `Latency` is the duration that a request is waiting to be handled (awaiting service). 
+The `response time` is what the `client sees` - it includes network delays and queueing delays. `Latency` is the duration that a request is waiting to be handled (awaiting service), is the delay. 
 
 A system that can run on a single machine is often simpler, but high-end machines can be very expensive, so very intensive workloads often `can’t avoid scaling out`. In reality, good architectures usually involve a  `mixture of approaches`.
 
@@ -55,36 +55,3 @@ For maintainability, there are three design principles for software systems:
 - Operability - Make it easy for operations teams to keep the system running smoothly.
 - Simplicity - Make it easy for new engineers to understand the system (rmv complexity).
 - Evolvability - Make it easy for engineers to make changes to the system in the future, adapting it for unanticipated use cases as requirements change (such as using agile working patterns).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
