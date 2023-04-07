@@ -1,7 +1,7 @@
 # 6. Partitioning
 For very large datasets or very high query throughput, to get better scalability, we need to break the data up into partitions (sharding). Different partitions can be placed on different nodes in a shared-nothing cluster, so a large dataset can be distributed across many disks, and the query load can be distributed across many processors.
 
-Normally, each piece of data (record, row, or document) belongs to exactly one partition. A node may store more than one partition.
+Normally, each piece of data (record/row/document) belongs to exactly one partition. A node may store more than one partition.
 
 Partitioning is usually combined with replication so that copies of each partition are stored on multiple nodes. If leader-follower replication is used, each partition’s leader is assigned to one node, and its followers are assigned to other nodes. Each node may be the leader for some partitions and a follower for other partitions. The choice of partitioning scheme is mostly independent of the choice of replication scheme. 
 
@@ -18,7 +18,7 @@ Document-based partitioning: each partition maintains its own secondary indexes,
 Term-based partitioning: construct a global index that covers data in all partitions, this global index is also partitioned. Makes read more efficient, but writes are slower. In practice, updates to global secondary indexes are often async. 
 
 ## Rebalancing Partitions
-Rebalancing: moving load from one node in the cluster to another.
+`Rebalancing`: moving load from one node in the cluster to another.
 - Fixed number of partitions: create many more partitions than there are nodes, and assign several partitions to each node. When a new node is added, it grabs a few partitions from each existing nodes. Used in Riak, Elasticsearch, Couchbase and Voldemort. 
 - Dynamic partitioning: When a partition grows to exceed a configured size, it is then divided into two partitions; shrinked partitions can also be merged into one. So the number of partitions adapts to the total data volume. Used in HBase and RethinkDB. 
 - Fixed number of partitions per node. Used by Cassandra and Ketama. 
