@@ -39,15 +39,15 @@ Each machine on the network has its own clock, which is an actual hardware devic
 
 It is possible to synchronize clocks to some degree: the most commonly used mechanism is the Network Time Protocol (NTP), which allows the computer clock to be adjusted according to the time reported by a group of servers. 
 
-Modern computers have at least two different kinds of clocks: a time-of-day clock and a monotonic clock.
+Modern computers have at least two different kinds of clocks: a `time-of-day clock` and a `monotonic clock`.
 
 If the local clock is too far ahead of the NTP server, it may be forcibly reset and appear to jump back to a previous point in time. These jumps, as well as the fact that they often ignore leap seconds, make time-of-day clocks unsuitable for measuring elapsed time. 
 
-A monotonic clock is suitable for measuring a duration (time interval), such as a timeout or a service’s response time. The name comes from the fact that they are guaranteed to always move forward (whereas a time-of-day clock may jump back in time).
+`A monotonic clock is suitable for measuring time intervals`, such as a timeout or a service’s response time. The name comes from the fact that they are guaranteed to always move forward (whereas a time-of-day clock may jump back in time).
 
 Logical clocks are based on incrementing counters rather than an oscillating quartz crystal, so they are a safer alternative for ordering events. Logical clocks do not measure the time of day or the number of seconds elapsed, only the relative ordering of events. 
 
-Time-of-day and monotonic clocks, which measure actual elapsed time, are also known as physical clocks.
+`Time-of-day and monotonic clocks`, which measure actual elapsed time, are also known as `physical clocks`.
 
 Google’s TrueTime API in Spanner explicitly reports the confidence interval on the local clock. When you ask it for the current time, you get back two values: [earliest, latest], which are the earliest possible and the latest possible timestamp.
 
@@ -55,14 +55,9 @@ Developing real-time systems is very expensive, and they are most commonly used 
 
 `Fencing tokens` can be used to protect access to some resource, in case a node claims itself as the leader while in fact it is not. 
 
-Distributed systems problems become much harder if there is a risk that nodes may “lie” (send arbitrary faulty or corrupted responses)—for example, if a node may claim to have received a particular message when in fact it didn’t. Such behavior is known as a `Byzantine fault`. 
+Distributed systems problems become much harder if there is a risk that nodes may “lie” (send arbitrary faulty or corrupted responses)— eg, if a node may claim to have received a particular message when in fact it didn’t. Such behavior is known as a `Byzantine fault`. 
 
 ## System Model and Reality
 For modeling real systems, the partially synchronous model with crash-recovery faults is generally the most useful model.
 
 Safety is often informally defined as nothing bad happens, and liveness as something good eventually happens.
-
-
-
-
-
